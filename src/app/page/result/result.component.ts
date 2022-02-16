@@ -6,7 +6,7 @@ import { PageService } from '../../service/page.service';
 @Component({
   selector: 'app-result',
   templateUrl: './result.component.html',
-  styleUrls: ['./result.component.sass']
+  styleUrls: ['./result.component.scss']
 })
 export class ResultComponent implements OnInit {
   questionResult: Record<string, string> = {};
@@ -24,19 +24,19 @@ export class ResultComponent implements OnInit {
     if (isSub) {
       code = isSub + '-' + code;
     }
-    const v = this.questionResult[code];
-    if (v && !question.data) {
-      return v;
+    const value = this.questionResult[code];
+    if (value && !question.data) {
+      return value;
     }
-    if (v && question.data) {
+    if (value && question.data) {
       if (typeof question.data[0] === 'string') {
-        return v;
+        return value;
       } else {
-        const index = parseInt(v) - 1;
-        return `${v}: ${(<OptionItemType>question.data[index]).val}`;
+        const index = parseInt(value) - 1;
+        return `${value}: ${(<OptionItemType>question.data[index]).val}`;
       }
     } else {
-      return v;
+      return value;
     }
   }
 

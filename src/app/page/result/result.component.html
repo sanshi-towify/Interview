@@ -1,48 +1,52 @@
 <mat-card class="ct">
-  <img src="http://interview.towify.com/assets/logo.jpg"/>
+  <img src="http://interview.towify.com/assets/logo.jpg" />
   <mat-card-title>Hey, 12123: Well Done ~</mat-card-title>
-  <hr/>
+  <hr />
 
   <p></p>
 
   <mat-card-content>
     <p
-    >Your interview questions have been submitted to the interviewer, we are reviewing your
+      >Your interview questions have been submitted to the interviewer, we are reviewing your
       comprehensive information, please wait a moment and we will come over to interview you soon.
     </p>
     <p>
       In this process, please also think about what questions you would like to ask the interviewer.
       We will also conduct a question-and-answer session during the interview.
     </p>
-    <hr/>
+    <hr />
     <p></p>
     <h2>Waiting Time:</h2>
 
     <h1>
-      <countdown [config]="{leftTime: 1800, format: 'mm:ss'}"></countdown>
+      <countdown [config]="{ leftTime: 1800, format: 'mm:ss' }"></countdown>
     </h1>
 
-    <hr/>
+    <hr />
 
     <p></p>
     <h2>Interview Result</h2>
 
-    <ng-container *ngFor="let p of pages">
-      <div *ngFor="let q of p.questions">
-        <button mat-flat-button color="accent">{{ q.label }}</button>
-        <ng-container *ngIf="q.items" >
-          <div *ngFor="let it of q.items" class="result">
+    <ng-container *ngFor="let page of pages">
+      <div *ngFor="let question of page.questions">
+        <button mat-flat-button color="accent">{{ question.label }}</button>
+        <ng-container *ngIf="question.items">
+          <div *ngFor="let it of question.items" class="result">
             <p
-            ><b>{{ it.label || (it.code | codeTitle) }}</b></p
+              ><b>{{ it.label || (it.code | codeTitle) }}</b></p
             >
             <p>{{ showAnswer(it) }}</p>
-            <ng-container *ngIf="it.subItems && it.subItems.length && questionResult[it.code+ '-'+it.subItems[0].code]">
+            <ng-container
+              *ngIf="
+                it.subItems && it.subItems.length && questionResult[it.code + '-' + it.subItems[0].code]
+              "
+            >
               <div class="item">
-                <div *ngFor="let s of it.subItems">
+                <div *ngFor="let item of it.subItems">
                   <p
-                  ><b>{{ s.label || (s.code | codeTitle) }}</b></p
+                    ><b>{{ item.label || (item.code | codeTitle) }}</b></p
                   >
-                  <p>{{ showAnswer(s, it.code) }}</p>
+                  <p>{{ showAnswer(item, it.code) }}</p>
                 </div>
               </div>
             </ng-container>
@@ -57,4 +61,4 @@
   </mat-card-content>
 </mat-card>
 
-<button class="btm-btn" mat-raised-button color="primary" (click)="resetPage()">Finish</button>
+<button class="bottom-button" mat-raised-button color="primary" (click)="resetPage()">Finish</button>

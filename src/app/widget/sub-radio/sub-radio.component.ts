@@ -1,5 +1,12 @@
 import { Component, Input, OnInit, forwardRef } from '@angular/core';
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  FormControl,
+  FormGroup,
+  NG_VALUE_ACCESSOR,
+  Validators
+} from '@angular/forms';
 import { QuestionType } from '../../service/type';
 
 const accessorProvider = {
@@ -11,24 +18,24 @@ const accessorProvider = {
 @Component({
   selector: 'app-sub-radio',
   templateUrl: './sub-radio.component.html',
-  providers: [accessorProvider],
-  styleUrls: ['./sub-radio.component.sass']
+  providers: [accessorProvider]
 })
 export class SubRadioComponent implements OnInit, ControlValueAccessor {
   isDisabled = false;
   value: string = '';
+  // @Input() option: QuestionType = { code: '', type: ''};
   @Input() option: any = {};
-  @Input() form: any = {};
+  @Input() form: FormGroup = new FormGroup({ item: new FormControl() });
 
   ngOnInit(): void {}
 
   get isShowSubItems(): boolean {
-    return this.option.subItems && +this.form.value[this.option.code] > 2;
+    return !!this.option.subItems && +this.form.value[this.option.code] > 2;
   }
 
   setSubValue(val: string, code: string): void {
     const name = this.option.code + '-' + code;
-    this.form.get(name).setValue(val);
+    this.form.get(name)?.setValue(val);
   }
 
   resetSubItems(): void {
@@ -48,22 +55,22 @@ export class SubRadioComponent implements OnInit, ControlValueAccessor {
   }
 
   onChange = (value: string) => {
-    this.writeValue(value);
+    this.value = value;
   };
 
-  onTouch: any = () => {
+  onTouch = () => {
     console.log('touched');
   };
 
-  writeValue(obj: any): void {
+  writeValue(obj: string): void {
     this.value = obj;
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: () => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouch = fn;
   }
 

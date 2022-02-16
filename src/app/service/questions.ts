@@ -20,7 +20,7 @@ const yesNo = ['Yes', 'No'];
 export const introduction: QuestionSessionType = {
   items: [
     {
-      noLabel: true,
+      isNoLabel: true,
       code: 'introduction',
       placeholder: 'Introduce yourself in english',
       type: 'textarea',
@@ -56,7 +56,8 @@ export const personal: QuestionSessionType = {
   items: [
     {
       code: 'chineseName',
-      type: 'text'
+      type: 'text',
+      valid: [Validators.min(100)]
     },
     {
       code: 'education',

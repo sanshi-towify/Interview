@@ -6,21 +6,21 @@
 >
   <mat-radio-button
     (change)="onChange($event.value)"
-    value="{{ item.key || item }}"
+    value="{{ item['key'] ? item['key'] : item }}"
     *ngFor="let item of option.data"
-    >{{ item.val || item }}</mat-radio-button
+    >{{ item['val'] || item }}</mat-radio-button
   >
 </mat-radio-group>
 
 <ng-container *ngIf="isShowSubItems">
-  <ng-container *ngFor="let su of option.subItems; let i = index">
-    <label class="head">{{ su.label }}</label>
+  <ng-container *ngFor="let subItem of option.subItems; let itemIndex = index">
+    <label class="head">{{ subItem.label }}</label>
     <mat-radio-group>
       <mat-radio-button
-        (change)="setSubValue($event.value, su.code)"
-        value="{{ item.key || item }}"
-        *ngFor="let item of su.data"
-        >{{ item.val || item }}</mat-radio-button
+        (change)="setSubValue($event.value, subItem.code)"
+        value="{{ item['key'] || item }}"
+        *ngFor="let item of subItem.data"
+        >{{ item['val'] ? item['val'] : item }}</mat-radio-button
       >
     </mat-radio-group>
   </ng-container>

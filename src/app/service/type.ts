@@ -8,7 +8,7 @@ export type QuestionType = {
   code: string;
   label?: string;
   inputType?: string;
-  noLabel?: boolean;
+  isNoLabel?: boolean;
   optional?: boolean;
   type: string;
   placeholder?: string;
@@ -16,7 +16,7 @@ export type QuestionType = {
   data?: string[] | OptionItemType[];
   valid?: ValidatorFn[] | string[];
   value?: string | number | boolean | Date;
-  checkValue?: any;
+  checkValue?: number;
   subItems?: QuestionType[];
 }
 

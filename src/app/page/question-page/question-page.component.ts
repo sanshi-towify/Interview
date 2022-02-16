@@ -1,14 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { PageService } from '../../service/page.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PageType, QuestionSessionType } from '../../service/type';
+import { PageType, QuestionSessionType, QuestionType } from '../../service/type';
 
 @Component({
   selector: 'app-question-page',
-  templateUrl: './question-page.component.html',
-  styleUrls: ['./question-page.component.sass']
+  templateUrl: './question-page.component.html'
 })
 export class QuestionPageComponent implements OnInit {
   questionSession: QuestionSessionType[] = [];
@@ -21,6 +27,14 @@ export class QuestionPageComponent implements OnInit {
   currentQuestionIndex = 0;
   currentSessionIndex = 0;
 
+  formErrors: Record<string, string> = {};
+
+  validationMessage: Record<string, string> = {
+    min: 'Length is too short',
+    max: 'Too Long',
+    required: 'It is required'
+  };
+
   constructor(
     private readonly router: Router,
     public readonly pageService: PageService,
@@ -32,35 +46,55 @@ export class QuestionPageComponent implements OnInit {
     this.getQuestionPage(0);
   }
 
-  setFormItemProperty(prop: any) {
-    if (!prop.valid) {
-      prop.valid = [];
+  setFormItemProperty(property: QuestionType) {
+    if (!property.valid) {
+      property.valid = [];
     }
-    if (!prop.optional) {
-      prop.valid.push(Validators.required);
+    if (!property.optional) {
+      // @ts-ignore
+      property.valid.push(Validators.required);
     }
-    return [this.questionResult[prop.code] || prop.value || '', prop.valid];
+    return [this.questionResult[property.code] || property.value || '', property.valid];
   }
 
   getQuestionPage(pageOffset: number): void {
     this.page = this.pageService.getNextPage(pageOffset);
     this.questionSession = this.page.questions;
-    const props: any = {};
+    const properties: {
+      [key: string]: {};
+    } = {};
     if (this.page.type === 'list') {
       this.questionSession.forEach(it => {
         if (it.items) {
           it.items.forEach(question => {
-            props[question.code] = this.setFormItemProperty(question);
+            properties[question.code] = this.setFormItemProperty(question);
           });
         }
       });
     } else {
       this.currentQuestionIndex = 0;
       this.currentSessionIndex = 0;
-      const item = this.questionSession[this.currentSessionIndex].items[this.currentQuestionIndex];
-      props[item.code] = this.setFormItemProperty(item);
+      const question =
+        this.questionSession[this.currentSessionIndex].items[this.currentQuestionIndex];
+      properties[question.code] = this.setFormItemProperty(question);
     }
-    this.pageForm = this.formBuilder.group(props);
+    this.pageForm = this.formBuilder.group(properties);
+    this.pageForm.valueChanges.subscribe(() => {
+      this.onValueChanged();
+    });
+  }
+
+  onValueChanged(): void {
+    for (const name in this.pageForm.controls) {
+      const control = this.pageForm.get(name);
+      if (control && control.invalid && (control.dirty || control.touched)) {
+        const messages = [];
+        for (const key in control.errors) {
+          messages.push(this.validationMessage[key]);
+        }
+        this.formErrors[name] = messages.join('\n');
+      }
+    }
   }
 
   get isHasNextPage(): boolean {
