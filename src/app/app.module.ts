@@ -5,9 +5,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WelcomeComponent } from './page/welcome/welcome.component';
-import {LoginDialog} from './page/welcome/login-dialog.component';
+import { LoginDialog } from './page/welcome/login-dialog.component';
 import { QuestionPageComponent } from './page/question-page/question-page.component';
-import { CountdownModule } from 'ngx-countdown'
+import { CountdownModule } from 'ngx-countdown';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
@@ -24,6 +24,8 @@ import { ResultComponent } from './page/result/result.component';
 import { CodeTitlePipe } from './pipe/code-title.pipe';
 import { CodePhPipe } from './pipe/code-ph.pipe';
 import { SubRadioComponent } from './widget/sub-radio/sub-radio.component';
+import { RadioTextPipe } from './pipe/radio-text.pipe';
+import { RadioKeyPipe } from './pipe/radio-key.pipe';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { SubRadioComponent } from './widget/sub-radio/sub-radio.component';
     ResultComponent,
     CodeTitlePipe,
     CodePhPipe,
-    SubRadioComponent
+    SubRadioComponent,
+    RadioKeyPipe,
+    RadioTextPipe
   ],
   imports: [
     BrowserModule,

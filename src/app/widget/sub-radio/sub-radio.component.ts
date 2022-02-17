@@ -23,8 +23,7 @@ const accessorProvider = {
 export class SubRadioComponent implements OnInit, ControlValueAccessor {
   isDisabled = false;
   value: string = '';
-  // @Input() option: QuestionType = { code: '', type: ''};
-  @Input() option: any = {};
+  @Input() option: QuestionType = { code: '', type: '', subItems: []};
   @Input() form: FormGroup = new FormGroup({ item: new FormControl() });
 
   ngOnInit(): void {}
