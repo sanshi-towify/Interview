@@ -9,7 +9,7 @@ export class RadioTextPipe implements PipeTransform {
     if (typeof value === 'string') {
       return value;
     } else {
-      return value.val;
+      return value.value;
     }
   }
 }

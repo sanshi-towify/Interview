@@ -3,7 +3,7 @@ import { OptionItemType, QuestionSessionType } from './type';
 
 const setRadioOptions = (arr: string[]): OptionItemType[] => {
   return arr.map((item, index): OptionItemType => {
-    return { key: (index + 1).toString(), val: item };
+    return { key: (index + 1).toString(), value: item };
   });
 };
 

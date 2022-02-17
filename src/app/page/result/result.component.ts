@@ -33,7 +33,7 @@ export class ResultComponent implements OnInit {
         return value;
       } else {
         const index = parseInt(value) - 1;
-        return `${value}: ${(<OptionItemType>question.data[index]).val}`;
+        return `${value}: ${(<OptionItemType>question.data[index]).value}`;
       }
     } else {
       return value;

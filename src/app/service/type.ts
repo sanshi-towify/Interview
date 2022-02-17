@@ -2,7 +2,7 @@ import { ValidatorFn } from '@angular/forms';
 
 export type OptionItemType = {
   key: string;
-  val: string;
+  value: string;
 };
 export type QuestionType = {
   code: string;
@@ -23,7 +23,6 @@ export type QuestionType = {
 export type QuestionSessionType = {
   label?: string;
   items: QuestionType[];
-  formProps?: [];
 };
 
 export type PageType = {

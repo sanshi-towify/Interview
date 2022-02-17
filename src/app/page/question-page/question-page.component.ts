@@ -51,7 +51,6 @@ export class QuestionPageComponent implements OnInit {
       property.valid = [];
     }
     if (!property.optional) {
-      // @ts-ignore
       property.valid.push(Validators.required);
     }
     return [this.questionResult[property.code] || property.value || '', property.valid];
