@@ -22,7 +22,7 @@ export class ResultComponent implements OnInit {
   showAnswer(question: QuestionType, isSub?: string): string {
     let code = question.code;
     if (isSub) {
-      code = isSub + '-' + code;
+      code = `${isSub}-${code}`;
     }
     const value = this.questionResult[code];
     if (value && !question.data) {
