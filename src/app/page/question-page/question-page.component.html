@@ -1,0 +1,110 @@
+<ng-container *ngIf="page">
+  <div *ngIf="page.greeting">
+    <h1> Hi {{ questionResult['chineseName'] }} </h1>
+
+    <ng-container *ngIf="page.introduction">
+      <div> Hi {{ page.introduction }} </div>
+      <hr />
+    </ng-container>
+  </div>
+
+  <ng-container *ngFor="let session of questionSession; let sessionIndex = index">
+    <mat-card
+      *ngIf="page.type === 'list' || (page.type === 'pop' && currentSessionIndex >= sessionIndex)"
+    >
+      <mat-card-title>{{ session.label }}</mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="pageForm">
+          <ng-container *ngFor="let sessionItem of session.items; let itemIndex = index">
+            <div
+              *ngIf="
+                page.type === 'list' ||
+                sessionIndex < currentSessionIndex ||
+                (page.type === 'pop' && currentQuestionIndex >= itemIndex)
+              "
+              class="marginY20"
+            >
+              <ng-container *ngIf="!sessionItem.isNoLabel">
+                <label class="head">
+                  <span class="blue-circle" *ngIf="page.ordered">{{ itemIndex + 1 }}</span>
+                  {{ sessionItem.label || (sessionItem.code | codeTitle) }}
+                  {{ sessionItem.valid && !sessionItem.valid[0] ? '(Option)' : '' }}
+                </label>
+              </ng-container>
+
+              <ng-container [ngSwitch]="sessionItem.type">
+                <mat-form-field *ngSwitchCase="'text'" appearance="fill">
+                  <input
+                    matInput
+                    [type]="sessionItem.inputType || 'text'"
+                    [placeholder]="sessionItem.placeholder || (sessionItem.code | codePh)"
+                    [formControlName]="sessionItem.code"
+                  />
+                  <mat-hint *ngIf="!!sessionItem.help">{{ sessionItem.help }}</mat-hint>
+                  <mat-error *ngIf="formErrors[sessionItem.code]"
+                    >{{ formErrors[sessionItem.code] }}
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field *ngSwitchCase="'textarea'">
+                  <textarea
+                    matInput
+                    [placeholder]="sessionItem.placeholder || (sessionItem.code | codePh)"
+                    [formControlName]="sessionItem.code"
+                    rows="8"
+                  ></textarea>
+                  <mat-hint *ngIf="!!sessionItem.help">{{ sessionItem.help }}</mat-hint>
+                  <mat-error *ngIf="formErrors[sessionItem.code]"
+                  >{{ formErrors[sessionItem.code] }}
+                  </mat-error>
+                </mat-form-field>
+                <ng-container *ngSwitchCase="'radio'">
+                  <app-sub-radio
+                    [option]="sessionItem"
+                    [form]="pageForm"
+                    [formControlName]="sessionItem.code"
+                  ></app-sub-radio>
+                </ng-container>
+                <mat-form-field *ngSwitchCase="'date'">
+                  <input
+                    matInput
+                    [matDatepicker]="picker"
+                    [placeholder]="sessionItem.placeholder || (sessionItem.code | codePh)"
+                    [formControlName]="sessionItem.code"
+                  />
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                  <mat-hint *ngIf="!!sessionItem.help">{{ sessionItem.help }}</mat-hint>
+                  <mat-error *ngIf="formErrors[sessionItem.code]"
+                  >{{ formErrors[sessionItem.code] }}
+                  </mat-error>
+                </mat-form-field>
+              </ng-container>
+            </div>
+          </ng-container>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+  <ng-container *ngIf="page?.type === 'list'">
+    <button
+      class="bottom-button"
+      [disabled]="!pageForm.valid"
+      *ngIf="isDone || isHasNextPage"
+      mat-raised-button
+      color="primary"
+      (click)="pageService.isDone ? finish() : nextPage()"
+      >{{ pageService.isDone ? 'Done' : page.buttonTitle }}</button
+    >
+  </ng-container>
+  <ng-container *ngIf="page.type === 'pop'">
+    <button
+      class="bottom-button"
+      [disabled]="!pageForm.valid"
+      mat-raised-button
+      color="primary"
+      (click)="nextItem()"
+      >{{ page.buttonTitle }}</button
+    >
+  </ng-container>
+  <p class="ct pt gray">Please fill in all the information</p>
+</ng-container>

@@ -1,0 +1,28 @@
+<mat-radio-group
+  *ngIf="option.data"
+  [disabled]="isDisabled"
+  [value]="value"
+  (change)="resetSubItems()"
+  (blur)="onTouch()"
+>
+  <mat-radio-button
+    (change)="onChange($event.value)"
+    *ngFor="let item of option.data"
+    [value]="item | radioKey"
+    >{{ item | radioText }}</mat-radio-button
+  >
+</mat-radio-group>
+
+<ng-container *ngIf="isShowSubItems">
+  <ng-container *ngFor="let subItem of option.subItems; let itemIndex = index">
+    <label class="head">{{ subItem.label }}</label>
+    <mat-radio-group *ngIf="subItem.data">
+      <mat-radio-button
+        (change)="setSubValue($event.value, subItem.code)"
+        [value]="item | radioKey"
+        *ngFor="let item of subItem.data"
+        >{{ item | radioText }}
+      </mat-radio-button>
+    </mat-radio-group>
+  </ng-container>
+</ng-container>
